@@ -13,27 +13,31 @@ struct ReviewCell: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(review.content)
-                .multilineTextAlignment(.leading)
+                .font(.body)
                 .foregroundColor(Color(hex: "#4b4b4b"))
+                .multilineTextAlignment(.leading)
+            
             Text(review.timestamp)
                 .font(.caption)
-                .foregroundColor(Color(hex: "#4b4b4b"))
+                .foregroundColor(Color(hex: "#8e8e93"))
         }
-        
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(hex: "#f7f7f7"))
-        .overlay(
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(Color(hex: "#4b4b4b")),
-            alignment: .bottom
+        .background(
+            RoundedRectangle(cornerRadius: 15)
+                .fill(Color(hex: "#ffffff"))
+                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
         )
+        .padding(.vertical, 4) 
     }
 }
 
-#Preview {
-    ReviewCell(review: Review(content: "This is a sample review content.", timestamp: "2h ago"))
+struct ReviewCell_Previews: PreviewProvider {
+    static var previews: some View {
+        ReviewCell(review: Review(content: "This is a sample review content.", timestamp: "2h ago"))
+            .previewLayout(.sizeThatFits)
+            .padding()
+    }
 }
 
 

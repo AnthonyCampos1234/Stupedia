@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct SearchButton: View {
+    @State private var isShowingSearchView = false
+    @State private var searchText = ""
+    
     var body: some View {
         Button(action: {
-            print("search button tapped.")
+            isShowingSearchView = true
         }) {
             ZStack {
                 Circle()
@@ -23,6 +26,11 @@ struct SearchButton: View {
             }
         }
         .buttonStyle(PlainButtonStyle())
+        .sheet(isPresented: $isShowingSearchView) {
+            NavigationView {
+                SearchView(searchText: $searchText)
+            }
+        }
     }
 }
 
