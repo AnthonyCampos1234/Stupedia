@@ -73,7 +73,6 @@ struct ContentView: View {
                         SearchButton()
                             .padding(.trailing, 30)
                             .padding(.bottom, 0)
-                            .shadow(color: Color.gray.opacity(0.5), radius: 4, x: 0, y: 2)
                             .accessibilityLabel("Search")
                             .onTapGesture {
                                 isPresentingSearch = true
@@ -84,9 +83,10 @@ struct ContentView: View {
                     }
                 }
             }
-            .background(Color(hex: "#f7f7f7"))
+            .background(Color(.black))
             .edgesIgnoringSafeArea(.top)
             .sheet(isPresented: $isPresentingSearch) {
+                Color.black.edgesIgnoringSafeArea(.all)
                 SearchView(searchText: $searchText)
             }
         }
@@ -109,12 +109,12 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 Text("Stupedia")
                     .font(.largeTitle)
-                    .foregroundColor(Color.black)
+                    .foregroundColor(Color(hex: "1ABC9C"))
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding()
-                    .background(Color(hex: "#f7f7f7"))
-                    .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
+                    .background(Color(.black))
+                    .shadow(color: Color.white.opacity(0.15), radius: 7, x: 0, y: 2)
             }
         }
     }

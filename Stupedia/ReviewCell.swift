@@ -14,19 +14,19 @@ struct ReviewCell: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(review.content)
                 .font(.body)
-                .foregroundColor(Color(hex: "#4b4b4b"))
+                .foregroundColor(Color(.white))
                 .multilineTextAlignment(.leading)
             
             Text(review.timestamp)
                 .font(.caption)
-                .foregroundColor(Color(hex: "#8e8e93"))
+                .foregroundColor(Color(hex: "1ABC9C"))
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 15)
-                .fill(Color(hex: "#ffffff"))
-                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+                .fill(Color(.black))
+                .shadow(color: Color.white.opacity(0.15), radius: 5, x: 0, y: 2)
         )
         .padding(.vertical, 4) 
     }

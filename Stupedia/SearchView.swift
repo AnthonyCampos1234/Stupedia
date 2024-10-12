@@ -13,68 +13,64 @@ struct SearchView: View {
     @FocusState private var isSearchFieldFocused: Bool
 
     var body: some View {
-        VStack {
-            HStack {
-                HStack(spacing: 12) {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
-                        .imageScale(.medium)
-                    
-                    TextField("Search...", text: $searchText)
-                        .focused($isSearchFieldFocused)
-                        .font(.system(size: 16))
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.none)
-                        .submitLabel(.search)
-                        .foregroundColor(.primary)
-                    
-                    if !searchText.isEmpty {
-                        Button(action: {
-                            searchText = ""
-                        }) {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
-                                .imageScale(.medium)
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+
+            VStack {
+                HStack {
+                    HStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.white)
+                            .imageScale(.medium)
+
+                        TextField("Search...", text: $searchText)
+                            .focused($isSearchFieldFocused)
+                            .font(.system(size: 16))
+                            .foregroundColor(Color(.white))
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.none)
+                            .submitLabel(.search)
+
+                        if !searchText.isEmpty {
+                            Button(action: {
+                                searchText = ""
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.white)
+                                    .imageScale(.medium)
+                            }
+                            .accessibilityLabel("Clear search text")
                         }
-                        .accessibilityLabel("Clear search text")
                     }
-                }
-                .padding(.vertical, 10)
-                .padding(.horizontal, 16)
-                .background(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color(.systemGray6), Color(.systemGray5)]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 16)
+                    .background(Color.black)
+                    .cornerRadius(10)
+                    .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 25)
+                            .stroke(Color(.white), lineWidth: 1)
                     )
-                )
-                .cornerRadius(25)
-                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 25)
-                        .stroke(Color(.systemGray4), lineWidth: 1)
-                )
-                
-                // Cancel Button
-                if isSearchFieldFocused {
-                    Button("Cancel") {
-                        withAnimation {
-                            searchText = ""
-                            isSearchFieldFocused = false
-                            dismiss()
+
+                    if isSearchFieldFocused {
+                        Button("Cancel") {
+                            withAnimation {
+                                searchText = ""
+                                isSearchFieldFocused = false
+                                dismiss()
+                            }
                         }
+                        .foregroundColor(Color(hex: "1ABC9C"))
+                        .transition(.move(edge: .trailing))
+                        .animation(.easeInOut, value: isSearchFieldFocused)
                     }
-                    .foregroundColor(.blue)
-                    .transition(.move(edge: .trailing))
-                    .animation(.easeInOut, value: isSearchFieldFocused)
                 }
+                .padding(.horizontal)
+                .padding(.top, 10)
+
+                Spacer()
             }
-            .padding(.horizontal)
-            .padding(.top, 10)
-            
-            Spacer()
         }
-        .background(Color(.systemBackground).edgesIgnoringSafeArea(.all))
         .onTapGesture {
             if isSearchFieldFocused {
                 isSearchFieldFocused = false

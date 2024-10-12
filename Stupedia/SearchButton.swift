@@ -17,7 +17,7 @@ struct SearchButton: View {
         }) {
             ZStack {
                 Circle()
-                    .fill(Color.black)
+                    .fill(Color(hex: "1ABC9C"))
                     .frame(width: 75, height: 75)
                 
                 Image(systemName: "magnifyingglass")
