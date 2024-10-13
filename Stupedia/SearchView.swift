@@ -14,6 +14,7 @@ struct SearchView: View {
     @FocusState private var isSearchFieldFocused: Bool
     @State private var searchResults: [String] = []
     @State private var keyboardHeight: CGFloat = 0
+    @State private var isViewAppeared = false
     
     private let tealColor = Color(hex: "1ABC9C")
     private let backgroundColor = Color.black
@@ -34,9 +35,17 @@ struct SearchView: View {
                 }
             }
         }
-        .onAppear(perform: focusSearchField)
+        .onAppear {
+            isViewAppeared = true
+            focusSearchField()
+        }
         .onChange(of: isActive) { _, newValue in
-            if newValue {
+            if newValue && isViewAppeared {
+                focusSearchField()
+            }
+        }
+        .onChange(of: isViewAppeared) { _, newValue in
+            if newValue && isActive {
                 focusSearchField()
             }
         }
@@ -149,8 +158,10 @@ struct SearchView: View {
     }
     
     private func focusSearchField() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.isSearchFieldFocused = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
         }
     }
