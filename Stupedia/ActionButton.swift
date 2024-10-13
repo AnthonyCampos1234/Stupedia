@@ -1,13 +1,14 @@
 //
-//  SearchButton.swift
+//  ActionButton.swift
 //  Stupedia
 //
-//  Created by Anthony Campos on 10/10/24.
+//  Created by Anthony Campos on 10/12/24.
 //
 
 import SwiftUI
 
-struct SearchButton: View {
+struct ActionButton: View {
+    @Binding var icon: String
     let action: () -> Void
     
     var body: some View {
@@ -17,7 +18,7 @@ struct SearchButton: View {
                     .fill(Color(hex: "1ABC9C"))
                     .frame(width: 70, height: 70)
                 
-                Image(systemName: "magnifyingglass")
+                Image(systemName: icon)
                     .foregroundStyle(Color.white)
                     .font(.system(size: 32))
             }
@@ -25,5 +26,4 @@ struct SearchButton: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
-
 

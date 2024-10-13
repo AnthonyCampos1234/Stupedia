@@ -9,79 +9,149 @@ import SwiftUI
 
 struct SearchView: View {
     @Binding var searchText: String
-    @Environment(\.dismiss) private var dismiss
+    @Binding var isActive: Bool
+    @Binding var buttonIcon: String
     @FocusState private var isSearchFieldFocused: Bool
-
+    @State private var searchResults: [String] = []
+    @State private var keyboardHeight: CGFloat = 0
+    
+    private let tealColor = Color(hex: "1ABC9C")
+    private let backgroundColor = Color.black
+    private let textColor = Color.white
+    private let secondaryColor = Color.gray
+    
     var body: some View {
         ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-
-            VStack {
-                HStack {
-                    HStack(spacing: 12) {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.white)
+            backgroundColor.edgesIgnoringSafeArea(.all)
+            
+            VStack(spacing: 0) {
+                searchBar
+                
+                if !searchText.isEmpty {
+                    resultsList
+                } else {
+                    placeholderContent
+                }
+            }
+        }
+        .onAppear(perform: focusSearchField)
+        .onChange(of: isActive) { _, newValue in
+            if newValue {
+                focusSearchField()
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
+            if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                let keyboardRectangle = keyboardFrame.cgRectValue
+                keyboardHeight = keyboardRectangle.height
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
+            keyboardHeight = 0
+        }
+    }
+    
+    private var searchBar: some View {
+        HStack(spacing: 16) {
+            HStack(spacing: 12) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(secondaryColor)
+                    .imageScale(.medium)
+                
+                TextField("Search...", text: $searchText)
+                    .focused($isSearchFieldFocused)
+                    .font(.system(size: 16))
+                    .foregroundColor(textColor)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.none)
+                    .submitLabel(.search)
+                    .onSubmit {
+                        performSearch()
+                    }
+                
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(secondaryColor)
                             .imageScale(.medium)
-
-                        TextField("Search...", text: $searchText)
-                            .focused($isSearchFieldFocused)
-                            .font(.system(size: 16))
-                            .foregroundColor(Color(.white))
-                            .autocorrectionDisabled()
-                            .textInputAutocapitalization(.none)
-                            .submitLabel(.search)
-
-                        if !searchText.isEmpty {
-                            Button(action: {
-                                searchText = ""
-                            }) {
-                                Image(systemName: "xmark.circle.fill")
-                                    .foregroundColor(.white)
-                                    .imageScale(.medium)
-                            }
-                            .accessibilityLabel("Clear search text")
-                        }
                     }
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 16)
-                    .background(Color.black)
-                    .cornerRadius(10)
-                    .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 25)
-                            .stroke(Color(.white), lineWidth: 1)
-                    )
-
-                    if isSearchFieldFocused {
-                        Button("Cancel") {
-                            withAnimation {
-                                searchText = ""
-                                isSearchFieldFocused = false
-                                dismiss()
-                            }
-                        }
-                        .foregroundColor(Color(hex: "1ABC9C"))
-                        .transition(.move(edge: .trailing))
-                        .animation(.easeInOut, value: isSearchFieldFocused)
-                    }
-                }
-                .padding(.horizontal)
-                .padding(.top, 10)
-
-                Spacer()
-            }
-        }
-        .onTapGesture {
-            if isSearchFieldFocused {
-                isSearchFieldFocused = false
-            }
-        }
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                withAnimation {
-                    self.isSearchFieldFocused = true
+                    .accessibilityLabel("Clear search text")
                 }
             }
+            .padding(.vertical, 12)
+            .padding(.horizontal, 16)
+            .background(Color(hex: "1E1E1E"))
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(tealColor.opacity(0.3), lineWidth: 1)
+            )
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 16)
+        .padding(.bottom, 20)
+        .background(backgroundColor)
+    }
+    
+    private var resultsList: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: 16) {
+                ForEach(searchResults, id: \.self) { result in
+                    HStack {
+                        Text(result)
+                            .foregroundColor(textColor)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(tealColor)
+                            .imageScale(.small)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 12)
+                    .background(Color(hex: "1E1E1E"))
+                    .cornerRadius(8)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 20)
+        }
+    }
+    
+    private var placeholderContent: some View {
+        VStack(spacing: 24) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 60))
+                .foregroundColor(tealColor)
+            Text("Search for articles, topics, or keywords")
+                .font(.headline)
+                .foregroundColor(secondaryColor)
+                .multilineTextAlignment(.center)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private func performSearch() {
+        // Simulated search functionality
+        // Replace this with actual search logic in a real app
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            if !searchText.isEmpty {
+                searchResults = [
+                    "Result 1 for \(searchText)",
+                    "Result 2 for \(searchText)",
+                    "Result 3 for \(searchText)",
+                    "Result 4 for \(searchText)",
+                    "Result 5 for \(searchText)"
+                ]
+            } else {
+                searchResults = []
+            }
+        }
+    }
+    
+    private func focusSearchField() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.isSearchFieldFocused = true
+            UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
         }
     }
 }
@@ -89,11 +159,11 @@ struct SearchView: View {
 struct SearchView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            SearchView(searchText: .constant(""))
+            SearchView(searchText: .constant(""), isActive: .constant(true), buttonIcon: .constant("magnifyingglass"))
                 .previewDevice("iPhone 14")
                 .preferredColorScheme(.light)
             
-            SearchView(searchText: .constant("Example Search"))
+            SearchView(searchText: .constant("Example Search"), isActive: .constant(true), buttonIcon: .constant("magnifyingglass"))
                 .previewDevice("iPhone 14")
                 .preferredColorScheme(.dark)
         }
