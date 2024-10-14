@@ -12,3 +12,10 @@ struct Review: Identifiable{
     let content: String
     let timestamp: String
 }
+
+struct Profile: Identifiable {
+    let id = UUID()
+    let name: String
+    let summary: String
+    let reviews: [Review]
+}

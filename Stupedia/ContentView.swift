@@ -65,6 +65,12 @@ struct ContentView: View {
         Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
         Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
         Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
+        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
+        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
+        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
+        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
+        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
+        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
         Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
         Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
         Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
@@ -87,34 +93,41 @@ struct ContentView: View {
     @State private var showHeader: Bool = true
     @State private var headerHeight: CGFloat = 0
     @State private var isSearchActive = false
-    @State private var searchButtonOpacity: Double = 1.0
+    @State private var actionButtonOpacity: Double = 1.0
     @State private var ticketCount: Int = 0
     @State private var buttonIcon: String = "magnifyingglass"
+    @State private var searchView: SearchView?
 
     var body: some View {
-        ZStack {
-            mainView
-                .offset(x: isSearchActive ? -UIScreen.main.bounds.width : 0)
-            
-            SearchView(searchText: $searchText, isActive: $isSearchActive, buttonIcon: $buttonIcon)
-                .offset(x: isSearchActive ? 0 : UIScreen.main.bounds.width)
-            
-            VStack {
-                Spacer()
-                HStack {
+        GeometryReader { geometry in
+            ZStack {
+                mainView
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .offset(x: isSearchActive ? -geometry.size.width : 0)
+                
+                SearchView(searchText: $searchText, isActive: $isSearchActive, buttonIcon: $buttonIcon)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .offset(x: isSearchActive ? 0 : geometry.size.width)
+                
+                VStack {
                     Spacer()
-                    ActionButton(icon: $buttonIcon, action: {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            isSearchActive.toggle()
-                            buttonIcon = isSearchActive ? "arrow.left" : "magnifyingglass"
-                        }
-                    })
+                    HStack {
+                        Spacer()
+                        ActionButton(icon: $buttonIcon, action: toggleSearch)
+                    }
+                    .padding(.trailing, 30)
+                    .padding(.bottom, 20)
                 }
-                .padding(.trailing, 30)
-                .padding(.bottom, 20)
             }
         }
         .animation(.easeInOut(duration: 0.3), value: isSearchActive)
+    }
+    
+    private func toggleSearch() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            isSearchActive.toggle()
+            buttonIcon = isSearchActive ? "arrow.left" : "magnifyingglass"
+        }
     }
     
     private var mainView: some View {
@@ -159,12 +172,12 @@ struct ContentView: View {
         if delta < -10 {
             withAnimation {
                 showHeader = false
-                searchButtonOpacity = 0.3 // Lower opacity when scrolling down
+                actionButtonOpacity = 0.3
             }
         } else if delta > 10 {
             withAnimation {
                 showHeader = true
-                searchButtonOpacity = 1.0 // Full opacity when scrolling up
+                actionButtonOpacity = 1.0 
             }
         }
         previousScrollOffset = newOffset
@@ -175,12 +188,12 @@ struct ContentView: View {
             HStack {
                 Text("Stupedia")
                     .font(.largeTitle)
-                    .foregroundColor(Color(hex: "1ABC9C"))
+                    .foregroundColor(Color(hex: "1E90FF"))
                     .fontWeight(.bold)
                 Spacer()
                 HStack(spacing: 5) {
                     Image(systemName: "ticket.fill")
-                        .foregroundColor(Color(hex: "1ABC9C"))
+                        .foregroundColor(Color(hex: "FF4500"))
                     Text("\(ticketCount)")
                         .foregroundColor(.white)
                         .fontWeight(.bold)

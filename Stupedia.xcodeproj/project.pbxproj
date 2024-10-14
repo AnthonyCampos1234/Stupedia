@@ -14,9 +14,7 @@
 		19345DC82CB0B685002491E2 /* StupediaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19345DC72CB0B685002491E2 /* StupediaTests.swift */; };
 		19345DD22CB0B685002491E2 /* StupediaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19345DD12CB0B685002491E2 /* StupediaUITests.swift */; };
 		19345DD42CB0B685002491E2 /* StupediaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19345DD32CB0B685002491E2 /* StupediaUITestsLaunchTests.swift */; };
-		19390A502CB833ED00368B5B /* SearchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19390A4F2CB833ED00368B5B /* SearchButton.swift */; };
 		19390A522CB83D8800368B5B /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19390A512CB83D8800368B5B /* SearchView.swift */; };
-		19390A582CBB322F00368B5B /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19390A572CBB322F00368B5B /* SearchBar.swift */; };
 		19390A5A2CBB426900368B5B /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19390A592CBB426900368B5B /* ActionButton.swift */; };
 		19B0EE1E2CB39A2400FAEB65 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B0EE1D2CB39A2400FAEB65 /* Review.swift */; };
 		19B0EE202CB39A9200FAEB65 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B0EE1F2CB39A9200FAEB65 /* ReviewCell.swift */; };
@@ -52,9 +50,7 @@
 		19345DCD2CB0B685002491E2 /* StupediaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StupediaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		19345DD12CB0B685002491E2 /* StupediaUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StupediaUITests.swift; sourceTree = "<group>"; };
 		19345DD32CB0B685002491E2 /* StupediaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StupediaUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		19390A4F2CB833ED00368B5B /* SearchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButton.swift; sourceTree = "<group>"; };
 		19390A512CB83D8800368B5B /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		19390A572CBB322F00368B5B /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		19390A592CBB426900368B5B /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		19B0EE1D2CB39A2400FAEB65 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		19B0EE1F2CB39A9200FAEB65 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
@@ -117,9 +113,7 @@
 				19B0EE1D2CB39A2400FAEB65 /* Review.swift */,
 				19B0EE1F2CB39A9200FAEB65 /* ReviewCell.swift */,
 				19B0EE212CB39F8D00FAEB65 /* ReviewListView.swift */,
-				19390A4F2CB833ED00368B5B /* SearchButton.swift */,
 				19390A512CB83D8800368B5B /* SearchView.swift */,
-				19390A572CBB322F00368B5B /* SearchBar.swift */,
 				19390A592CBB426900368B5B /* ActionButton.swift */,
 			);
 			path = Stupedia;
@@ -286,9 +280,7 @@
 				19390A522CB83D8800368B5B /* SearchView.swift in Sources */,
 				19B0EE1E2CB39A2400FAEB65 /* Review.swift in Sources */,
 				19390A5A2CBB426900368B5B /* ActionButton.swift in Sources */,
-				19390A582CBB322F00368B5B /* SearchBar.swift in Sources */,
 				19B0EE222CB39F8D00FAEB65 /* ReviewListView.swift in Sources */,
-				19390A502CB833ED00368B5B /* SearchButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -451,6 +443,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Stupedia/Preview Content\"";
+				DEVELOPMENT_TEAM = HW2MTW777S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -488,6 +481,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Stupedia/Preview Content\"";
+				DEVELOPMENT_TEAM = HW2MTW777S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;

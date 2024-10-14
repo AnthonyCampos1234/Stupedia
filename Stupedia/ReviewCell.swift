@@ -19,7 +19,7 @@ struct ReviewCell: View {
             
             Text(review.timestamp)
                 .font(.caption)
-                .foregroundColor(Color(hex: "1ABC9C"))
+                .foregroundColor(Color(hex: "FF69B4"))
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)

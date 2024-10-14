@@ -14,9 +14,12 @@ struct SearchView: View {
     @FocusState private var isSearchFieldFocused: Bool
     @State private var searchResults: [String] = []
     @State private var keyboardHeight: CGFloat = 0
-    @State private var isViewAppeared = false
+    @State private var shouldShowKeyboard = false
+    @State private var profiles: [Profile] = []
+    @State private var selectedProfile: Profile?
+    @State private var showingProfile = false
     
-    private let tealColor = Color(hex: "1ABC9C")
+    private let tealColor = Color(hex: "1E90FF")
     private let backgroundColor = Color.black
     private let textColor = Color.white
     private let secondaryColor = Color.gray
@@ -34,19 +37,27 @@ struct SearchView: View {
                     placeholderContent
                 }
             }
-        }
-        .onAppear {
-            isViewAppeared = true
-            focusSearchField()
-        }
-        .onChange(of: isActive) { _, newValue in
-            if newValue && isViewAppeared {
-                focusSearchField()
+            .sheet(item: $selectedProfile) { profile in
+                ProfileView(name: profile.name, summary: profile.summary, reviews: profile.reviews)
             }
         }
-        .onChange(of: isViewAppeared) { _, newValue in
-            if newValue && isActive {
-                focusSearchField()
+        .onChange(of: isActive) { _, newValue in
+            if newValue {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.shouldShowKeyboard = true
+                }
+            } else {
+                self.shouldShowKeyboard = false
+                self.isSearchFieldFocused = false
+            }
+        }
+        .onChange(of: shouldShowKeyboard) { _, newValue in
+            if newValue {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    self.isSearchFieldFocused = true
+                }
+            } else {
+                self.isSearchFieldFocused = false
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { notification in
@@ -105,19 +116,53 @@ struct SearchView: View {
     private var resultsList: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 16) {
-                ForEach(searchResults, id: \.self) { result in
-                    HStack {
-                        Text(result)
-                            .foregroundColor(textColor)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(tealColor)
-                            .imageScale(.small)
+                if !profiles.isEmpty {
+                    Text("Profiles")
+                        .font(.headline)
+                        .foregroundColor(tealColor)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 20)
+                    
+                    ForEach(profiles) { profile in
+                        HStack {
+                            Text(profile.name)
+                                .foregroundColor(textColor)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(tealColor)
+                                .imageScale(.small)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 12)
+                        .background(Color(hex: "1E1E1E"))
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            selectedProfile = profile
+                        }
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
-                    .background(Color(hex: "1E1E1E"))
-                    .cornerRadius(8)
+                }
+                
+                if !searchResults.isEmpty {
+                    Text("Results")
+                        .font(.headline)
+                        .foregroundColor(tealColor)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 20)
+                    
+                    ForEach(searchResults, id: \.self) { result in
+                        HStack {
+                            Text(result)
+                                .foregroundColor(textColor)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(tealColor)
+                                .imageScale(.small)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 12)
+                        .background(Color(hex: "1E1E1E"))
+                        .cornerRadius(8)
+                    }
                 }
             }
             .padding(.horizontal, 16)
@@ -130,7 +175,7 @@ struct SearchView: View {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 60))
                 .foregroundColor(tealColor)
-            Text("Search for articles, topics, or keywords")
+            Text("Search using names or emails")
                 .font(.headline)
                 .foregroundColor(secondaryColor)
                 .multilineTextAlignment(.center)
@@ -151,8 +196,17 @@ struct SearchView: View {
                     "Result 4 for \(searchText)",
                     "Result 5 for \(searchText)"
                 ]
+                
+                // Simulated profile search
+                profiles = [
+                    Profile(name: "\(searchText) User", summary: "A Stupedia contributor", reviews: [
+                        Review(content: "Great article!", timestamp: "2h ago"),
+                        Review(content: "Interesting perspective", timestamp: "1d ago")
+                    ])
+                ]
             } else {
                 searchResults = []
+                profiles = []
             }
         }
     }
@@ -164,6 +218,11 @@ struct SearchView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             UIApplication.shared.sendAction(#selector(UIResponder.becomeFirstResponder), to: nil, from: nil, for: nil)
         }
+    }
+    
+    public func dismissKeyboard() {
+        shouldShowKeyboard = false
+        isSearchFieldFocused = false
     }
 }
 
