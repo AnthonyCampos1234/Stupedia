@@ -16,9 +16,17 @@
 		19345DD42CB0B685002491E2 /* StupediaUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19345DD32CB0B685002491E2 /* StupediaUITestsLaunchTests.swift */; };
 		19390A522CB83D8800368B5B /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19390A512CB83D8800368B5B /* SearchView.swift */; };
 		19390A5A2CBB426900368B5B /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19390A592CBB426900368B5B /* ActionButton.swift */; };
-		19B0EE1E2CB39A2400FAEB65 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B0EE1D2CB39A2400FAEB65 /* Review.swift */; };
-		19B0EE202CB39A9200FAEB65 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B0EE1F2CB39A9200FAEB65 /* ReviewCell.swift */; };
-		19B0EE222CB39F8D00FAEB65 /* ReviewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B0EE212CB39F8D00FAEB65 /* ReviewListView.swift */; };
+		198691F62CBDEA0900E6DC85 /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 198691F52CBDEA0900E6DC85 /* Auth */; };
+		198691F82CBDEA0900E6DC85 /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 198691F72CBDEA0900E6DC85 /* Functions */; };
+		198691FA2CBDEA0900E6DC85 /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 198691F92CBDEA0900E6DC85 /* PostgREST */; };
+		198691FC2CBDEA0900E6DC85 /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 198691FB2CBDEA0900E6DC85 /* Realtime */; };
+		198691FE2CBDEA0900E6DC85 /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 198691FD2CBDEA0900E6DC85 /* Storage */; };
+		198692002CBDEA0900E6DC85 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 198691FF2CBDEA0900E6DC85 /* Supabase */; };
+		198692022CBDEA3B00E6DC85 /* SupabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 198692012CBDEA3B00E6DC85 /* SupabaseManager.swift */; };
+		19CEFBB02CBDEAEE00A9179C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CEFBAF2CBDEAEE00A9179C /* OnboardingView.swift */; };
+		19CEFBB22CBE246200A9179C /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CEFBB12CBE246200A9179C /* PageView.swift */; };
+		19CEFBB42CBE2C6C00A9179C /* ContributionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CEFBB32CBE2C6C00A9179C /* ContributionSheet.swift */; };
+		19CEFBB62CBE4C1100A9179C /* ScrollViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CEFBB52CBE4C1100A9179C /* ScrollViewHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,9 +60,11 @@
 		19345DD32CB0B685002491E2 /* StupediaUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StupediaUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		19390A512CB83D8800368B5B /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		19390A592CBB426900368B5B /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
-		19B0EE1D2CB39A2400FAEB65 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
-		19B0EE1F2CB39A9200FAEB65 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
-		19B0EE212CB39F8D00FAEB65 /* ReviewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListView.swift; sourceTree = "<group>"; };
+		198692012CBDEA3B00E6DC85 /* SupabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseManager.swift; sourceTree = "<group>"; };
+		19CEFBAF2CBDEAEE00A9179C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		19CEFBB12CBE246200A9179C /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
+		19CEFBB32CBE2C6C00A9179C /* ContributionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContributionSheet.swift; sourceTree = "<group>"; };
+		19CEFBB52CBE4C1100A9179C /* ScrollViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +72,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				198691FA2CBDEA0900E6DC85 /* PostgREST in Frameworks */,
+				198691F82CBDEA0900E6DC85 /* Functions in Frameworks */,
+				198692002CBDEA0900E6DC85 /* Supabase in Frameworks */,
+				198691F62CBDEA0900E6DC85 /* Auth in Frameworks */,
+				198691FE2CBDEA0900E6DC85 /* Storage in Frameworks */,
+				198691FC2CBDEA0900E6DC85 /* Realtime in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,11 +126,13 @@
 				19345DB92CB0B685002491E2 /* Assets.xcassets */,
 				19345DBB2CB0B685002491E2 /* Stupedia.entitlements */,
 				19345DBC2CB0B685002491E2 /* Preview Content */,
-				19B0EE1D2CB39A2400FAEB65 /* Review.swift */,
-				19B0EE1F2CB39A9200FAEB65 /* ReviewCell.swift */,
-				19B0EE212CB39F8D00FAEB65 /* ReviewListView.swift */,
 				19390A512CB83D8800368B5B /* SearchView.swift */,
 				19390A592CBB426900368B5B /* ActionButton.swift */,
+				198692012CBDEA3B00E6DC85 /* SupabaseManager.swift */,
+				19CEFBAF2CBDEAEE00A9179C /* OnboardingView.swift */,
+				19CEFBB12CBE246200A9179C /* PageView.swift */,
+				19CEFBB32CBE2C6C00A9179C /* ContributionSheet.swift */,
+				19CEFBB52CBE4C1100A9179C /* ScrollViewHelper.swift */,
 			);
 			path = Stupedia;
 			sourceTree = "<group>";
@@ -232,6 +250,9 @@
 				Base,
 			);
 			mainGroup = 19345DA92CB0B683002491E2;
+			packageReferences = (
+				198691F42CBDEA0900E6DC85 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			productRefGroup = 19345DB32CB0B683002491E2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -275,12 +296,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				19345DB82CB0B683002491E2 /* ContentView.swift in Sources */,
-				19B0EE202CB39A9200FAEB65 /* ReviewCell.swift in Sources */,
+				19CEFBB02CBDEAEE00A9179C /* OnboardingView.swift in Sources */,
+				198692022CBDEA3B00E6DC85 /* SupabaseManager.swift in Sources */,
 				19345DB62CB0B683002491E2 /* StupediaApp.swift in Sources */,
 				19390A522CB83D8800368B5B /* SearchView.swift in Sources */,
-				19B0EE1E2CB39A2400FAEB65 /* Review.swift in Sources */,
+				19CEFBB42CBE2C6C00A9179C /* ContributionSheet.swift in Sources */,
+				19CEFBB22CBE246200A9179C /* PageView.swift in Sources */,
+				19CEFBB62CBE4C1100A9179C /* ScrollViewHelper.swift in Sources */,
 				19390A5A2CBB426900368B5B /* ActionButton.swift in Sources */,
-				19B0EE222CB39F8D00FAEB65 /* ReviewListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -635,6 +658,50 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		198691F42CBDEA0900E6DC85 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		198691F52CBDEA0900E6DC85 /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 198691F42CBDEA0900E6DC85 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		198691F72CBDEA0900E6DC85 /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 198691F42CBDEA0900E6DC85 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		198691F92CBDEA0900E6DC85 /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 198691F42CBDEA0900E6DC85 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		198691FB2CBDEA0900E6DC85 /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 198691F42CBDEA0900E6DC85 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		198691FD2CBDEA0900E6DC85 /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 198691F42CBDEA0900E6DC85 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		198691FF2CBDEA0900E6DC85 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 198691F42CBDEA0900E6DC85 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 19345DAA2CB0B683002491E2 /* Project object */;
 }

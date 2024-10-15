@@ -35,77 +35,62 @@ extension Color {
 }
 
 struct ContentView: View {
-    @State private var reviews = [
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-        Review(content: "This guy is actually kind of cool.", timestamp: "1d ago"),
-        Review(content: "Yo this kid is lowk stupid.", timestamp: "2h ago"),
-        Review(content: "This guy saved 10 children oml!", timestamp: "5h ago"),
-    ]
-    @State private var isPresentingSearch = false
-    @State public var searchText = ""
-    @State private var scrollOffset: CGFloat = 0
-    @State private var previousScrollOffset: CGFloat = 0
-    @State private var showHeader: Bool = true
-    @State private var headerHeight: CGFloat = 0
+    @AppStorage("isUserAuthenticated") private var isUserAuthenticated = false
+    @State private var contributions: [Contribution] = []
+    @State private var isLoading = true
+    @State private var searchText = ""
     @State private var isSearchActive = false
-    @State private var actionButtonOpacity: Double = 1.0
-    @State private var ticketCount: Int = 0
-    @State private var buttonIcon: String = "magnifyingglass"
-    @State private var searchView: SearchView?
+    @State private var buttonIcon = "magnifyingglass"
+    @State private var ticketCount = 5
+    @State private var contributionCount = 0
+    @State private var selectedContribution: Contribution?
+    @State private var showExpandedContribution = false
+    @State private var headerHeight: CGFloat = 0
+    @State private var showHeader = true
+    @State private var lastScrollPosition: CGFloat = 0
 
     var body: some View {
+        Group {
+            if isUserAuthenticated {
+                mainAppView
+            } else {
+                OnboardingView(isAuthenticated: $isUserAuthenticated)
+            }
+        }
+        .onAppear {
+            checkAuthenticationStatus()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+            checkAuthenticationStatus()
+        }
+    }
+    
+    private func checkAuthenticationStatus() {
+        Task {
+            let authenticated = await SupabaseManager.shared.isAuthenticated()
+            DispatchQueue.main.async {
+                isUserAuthenticated = authenticated
+            }
+        }
+    }
+    
+    private var mainAppView: some View {
         GeometryReader { geometry in
             ZStack {
+                Color.black.edgesIgnoringSafeArea(.all)
+                
                 mainView
                     .frame(width: geometry.size.width, height: geometry.size.height)
                     .offset(x: isSearchActive ? -geometry.size.width : 0)
                 
-                SearchView(searchText: $searchText, isActive: $isSearchActive, buttonIcon: $buttonIcon)
+                SearchView(
+                    searchText: $searchText,
+                    isActive: $isSearchActive,
+                    buttonIcon: $buttonIcon,
+                    ticketCount: $ticketCount,
+                    isSearchActive: $isSearchActive,
+                    contributionCount: $contributionCount
+                )
                     .frame(width: geometry.size.width, height: geometry.size.height)
                     .offset(x: isSearchActive ? 0 : geometry.size.width)
                 
@@ -114,6 +99,14 @@ struct ContentView: View {
                     HStack {
                         Spacer()
                         ActionButton(icon: $buttonIcon, action: toggleSearch)
+                        Button(action: signOut) {
+                            Text("Sign Out")
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundColor(.black)
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(10)
+                        }
                     }
                     .padding(.trailing, 30)
                     .padding(.bottom, 20)
@@ -123,27 +116,23 @@ struct ContentView: View {
         .animation(.easeInOut(duration: 0.3), value: isSearchActive)
     }
     
-    private func toggleSearch() {
-        withAnimation(.easeInOut(duration: 0.3)) {
-            isSearchActive.toggle()
-            buttonIcon = isSearchActive ? "arrow.left" : "magnifyingglass"
-        }
-    }
-    
     private var mainView: some View {
         ZStack(alignment: .top) {
             ScrollView {
                 VStack(spacing: 0) {
                     GeometryReader { geometry in
-                        Color.clear
-                            .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named("scroll")).minY)
+                        Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named("scroll")).origin.y)
                     }
-                    .frame(height: 50)
+                    .frame(height: 0)
                     
-                    ForEach(reviews) { review in
-                        ReviewCell(review: review)
+                    ForEach(contributions) { contribution in
+                        ContributionCell(contribution: contribution)
                             .padding(.horizontal)
                             .padding(.vertical, 1)
+                            .onTapGesture {
+                                selectedContribution = contribution
+                                showExpandedContribution = true
+                            }
                     }
                 }
                 .padding(.top, headerHeight)
@@ -160,106 +149,176 @@ struct ContentView: View {
                 .onPreferenceChange(ViewHeightKey.self) { height in
                     self.headerHeight = height
                 }
-                .offset(y: showHeader ? 40 : -headerHeight)
-                .animation(.easeInOut(duration: 0.1), value: showHeader)
+                .offset(y: showHeader ? 0 : -headerHeight)
+                .animation(.easeInOut(duration: 0.3), value: showHeader)
         }
-        .background(Color(.black))
+        .background(Color.black)
         .edgesIgnoringSafeArea(.top)
-    }
-    
-    private func handleScrollChange(newOffset: CGFloat) {
-        let delta = newOffset - previousScrollOffset
-        if delta < -10 {
-            withAnimation {
-                showHeader = false
-                actionButtonOpacity = 0.3
-            }
-        } else if delta > 10 {
-            withAnimation {
-                showHeader = true
-                actionButtonOpacity = 1.0 
+        .sheet(isPresented: $showExpandedContribution) {
+            if let contribution = selectedContribution {
+                ExpandedContributionView(contribution: contribution, showExpandedContribution: $showExpandedContribution)
             }
         }
-        previousScrollOffset = newOffset
+        .onAppear {
+            loadContributions()
+        }
     }
     
-    var headerView: some View {
+    private func loadContributions() {
+        isLoading = true
+        Task {
+            do {
+                contributions = try await SupabaseManager.shared.getAllContributions()
+                isLoading = false
+            } catch {
+                print("Error loading contributions: \(error)")
+                isLoading = false
+            }
+        }
+    }
+
+    private var headerView: some View {
         VStack(spacing: 0) {
             HStack {
                 Text("Stupedia")
-                    .font(.largeTitle)
-                    .foregroundColor(Color(hex: "1E90FF"))
-                    .fontWeight(.bold)
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(.white)
                 Spacer()
-                HStack(spacing: 5) {
+                HStack(spacing: 8) {
                     Image(systemName: "ticket.fill")
-                        .foregroundColor(Color(hex: "FF4500"))
+                        .foregroundColor(.white)
+                        .font(.system(size: 24))
                     Text("\(ticketCount)")
                         .foregroundColor(.white)
-                        .fontWeight(.bold)
+                        .font(.system(size: 24, weight: .bold))
                 }
-                .padding(.trailing, 10)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(Color(.black))
-            .shadow(color: Color.white.opacity(0.15), radius: 7, x: 0, y: 2)
+            .padding(.horizontal)
+            .padding(.top, 50)
+            .padding(.bottom, 10)
+            .background(Color.black)
+        }
+        .background(Color.black)
+        .shadow(color: Color.white.opacity(0.15), radius: 7, x: 0, y: 2)
+    }
+    
+    private func toggleSearch() {
+        withAnimation(.easeInOut(duration: 0.3)) {
+            isSearchActive.toggle()
+            buttonIcon = isSearchActive ? "arrow.left" : "magnifyingglass"
         }
     }
     
-    private var searchBarView: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.gray)
-                .padding(.leading, 8)
-            
-            TextField("Search...", text: $searchText)
-                .textFieldStyle(PlainTextFieldStyle())
-                .padding(10)
-                .background(Color(.systemGray6))
-                .cornerRadius(28)
-                .onTapGesture {
-                    withAnimation {
-                        isSearchActive = true
-                    }
+    private func signOut() {
+        Task {
+            do {
+                try await SupabaseManager.shared.signOut()
+                DispatchQueue.main.async {
+                    isUserAuthenticated = false
                 }
-            
-            if isSearchActive {
-                Button("Cancel") {
-                    withAnimation {
-                        isSearchActive = false
-                        searchText = ""
-                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    }
-                }
-                .foregroundColor(Color(hex: "1ABC9C"))
-                .transition(.move(edge: .trailing))
+            } catch {
+                print("Error signing out: \(error)")
             }
         }
-        .animation(.easeInOut, value: isSearchActive)
     }
     
-    struct ScrollOffsetPreferenceKey: PreferenceKey {
-        static var defaultValue: CGFloat = 0
-        static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-            value = nextValue()
-        }
-    }
-    
-    struct ViewHeightKey: PreferenceKey {
-        static var defaultValue: CGFloat { 0 }
-        static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
-            value = nextValue()
+    private func handleScrollChange(newOffset: CGFloat) {
+        let delta = newOffset - lastScrollPosition
+        lastScrollPosition = newOffset
+        
+        withAnimation {
+            if delta > 0 {
+                // Scrolling down
+                showHeader = false
+            } else if delta < 0 {
+                // Scrolling up
+                showHeader = true
+            }
         }
     }
 }
 
-    #Preview {
+struct ContributionCell: View {
+    let contribution: Contribution
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(contribution.content)
+                .font(.system(size: 28))
+                .foregroundColor(.white)
+                .multilineTextAlignment(.leading)
+            
+            HStack {
+                StarRating(rating: contribution.rating, color: .yellow)
+                Spacer()
+                Text(contribution.timestamp, style: .relative)
+                    .font(.system(size: 20))
+                    .foregroundColor(.white)
+            }
+        }
+        .padding()
+        .background(Color.gray.opacity(0.2))
+        .cornerRadius(10)
+    }
+}
+
+struct ExpandedContributionView: View {
+    let contribution: Contribution
+    @Binding var showExpandedContribution: Bool
+
+    var body: some View {
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            
+            VStack(spacing: 20) {
+                Text(contribution.content)
+                    .font(.system(size: 28))
+                    .foregroundColor(.white)
+                    .padding()
+
+                HStack {
+                    StarRating(rating: contribution.rating, color: .yellow)
+                    Spacer()
+                    Text(contribution.timestamp, style: .date)
+                        .font(.system(size: 20))
+                        .foregroundColor(.white)
+                }
+                .padding(.horizontal)
+
+                Button(action: {
+                    showExpandedContribution = false
+                }) {
+                    Text("Close")
+                        .font(.system(size: 28, weight: .bold))
+                        .foregroundColor(.black)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(10)
+                }
+            }
+            .padding()
+            .background(Color.black)
+            .cornerRadius(20)
+        }
+    }
+}
+
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+struct ViewHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat { 0 }
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
         ContentView()
     }
-
-
-
-
-
-
+}

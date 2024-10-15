@@ -15,6 +15,7 @@ struct ActionButton: View {
     
     var body: some View {
         Button(action: {
+            hapticFeedback()
             withAnimation(.easeInOut(duration: 0.3)) {
                 isRotating.toggle()
             }
@@ -22,13 +23,18 @@ struct ActionButton: View {
         }) {
             ZStack {
                 Circle()
-                    .fill(Color(hex: "1E90FF"))
+                    .fill(Color.white)
                     .frame(width: 70, height: 70)
                 
                 IconView(icon: icon, isRotating: isRotating)
             }
         }
         .buttonStyle(PlainButtonStyle())
+    }
+    
+    private func hapticFeedback() {
+        let impact = UIImpactFeedbackGenerator(style: .medium)
+        impact.impactOccurred()
     }
 }
 
@@ -45,7 +51,7 @@ struct IconView: View {
                 .opacity(icon == "arrow.left" ? 1 : 0)
                 .rotationEffect(.degrees(isRotating ? 0 : 90))
         }
-        .foregroundStyle(Color.white)
+        .foregroundStyle(Color.black)
         .font(.system(size: 32))
     }
 }
