@@ -48,6 +48,8 @@ struct ContentView: View {
     @State private var headerHeight: CGFloat = 0
     @State private var showHeader = true
     @State private var lastScrollPosition: CGFloat = 0
+    @State private var refreshTimer: Timer?
+    @State private var isRefreshing = false
 
     var body: some View {
         Group {
@@ -57,20 +59,24 @@ struct ContentView: View {
                 OnboardingView(isAuthenticated: $isUserAuthenticated)
             }
         }
-        .onAppear {
-            checkAuthenticationStatus()
+        .task {
+            await checkAuthenticationStatus()
+            startRefreshTimer()
+        }
+        .onDisappear {
+            stopRefreshTimer()
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
-            checkAuthenticationStatus()
+            Task {
+                await checkAuthenticationStatus()
+            }
         }
     }
     
-    private func checkAuthenticationStatus() {
-        Task {
-            let authenticated = await SupabaseManager.shared.isAuthenticated()
-            DispatchQueue.main.async {
-                isUserAuthenticated = authenticated
-            }
+    private func checkAuthenticationStatus() async {
+        let authenticated = await SupabaseManager.shared.isAuthenticated()
+        DispatchQueue.main.async {
+            isUserAuthenticated = authenticated
         }
     }
     
@@ -119,6 +125,9 @@ struct ContentView: View {
     private var mainView: some View {
         ZStack(alignment: .top) {
             ScrollView {
+                RefreshControl(isRefreshing: $isRefreshing, coordinateSpace: .named("scroll")) {
+                    await refreshContributions()
+                }
                 VStack(spacing: 0) {
                     GeometryReader { geometry in
                         Color.clear.preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named("scroll")).origin.y)
@@ -160,19 +169,31 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            loadContributions()
+            Task {
+                await loadContributions()
+            }
         }
     }
     
-    private func loadContributions() {
+    private func refreshContributions() async {
+        isRefreshing = true
+        await loadContributions()
+        isRefreshing = false
+    }
+
+    private func loadContributions() async {
         isLoading = true
-        Task {
-            do {
-                contributions = try await SupabaseManager.shared.getAllContributions()
-                isLoading = false
-            } catch {
-                print("Error loading contributions: \(error)")
-                isLoading = false
+        do {
+            let newContributions = try await SupabaseManager.shared.getAllContributions()
+            DispatchQueue.main.async {
+                self.contributions = newContributions
+                self.isLoading = false
+                self.contributionCount = newContributions.count
+            }
+        } catch {
+            print("Error loading contributions: \(error)")
+            DispatchQueue.main.async {
+                self.isLoading = false
             }
         }
     }
@@ -235,6 +256,19 @@ struct ContentView: View {
                 showHeader = true
             }
         }
+    }
+
+    private func startRefreshTimer() {
+        refreshTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+            Task {
+                await loadContributions()
+            }
+        }
+    }
+
+    private func stopRefreshTimer() {
+        refreshTimer?.invalidate()
+        refreshTimer = nil
     }
 }
 
@@ -320,5 +354,33 @@ struct ViewHeightKey: PreferenceKey {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+struct RefreshControl: View {
+    @Binding var isRefreshing: Bool
+    let coordinateSpace: CoordinateSpace
+    var onRefresh: () async -> Void
+
+    @State private var progress: CGFloat = 0
+
+    var body: some View {
+        GeometryReader { geometry in
+            if geometry.frame(in: coordinateSpace).midY > 50 {
+                Spacer()
+                    .onAppear {
+                        Task {
+                            await onRefresh()
+                        }
+                    }
+            } else {
+                let pullProgress = min(max(geometry.frame(in: coordinateSpace).midY / 150, 0), 1)
+                ProgressView()
+                    .scaleEffect(pullProgress)
+                    .opacity(pullProgress)
+                    .frame(width: geometry.size.width)
+            }
+        }
+        .padding(.top, -50)
     }
 }
