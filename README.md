@@ -7,11 +7,11 @@ Stupedia was an experimental project aimed at recreating the functionality of th
 Here's a glimpse of what is was becoming:
 
 <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
-  <img src="StupediaPics/pic1" width="150" style="margin: 10px;"/>
-  <img src="StupediaPics/pic2" width="150" style="margin: 10px;"/>
-  <img src="StupediaPics/pic3" width="150" style="margin: 10px;"/>
-  <img src="StupediaPics/pic4" width="150" style="margin: 10px;"/>
-  <img src="StupediaPics/pic5" width="150" style="margin: 10px;"/>
+  <img src="StupediaPics/pic1.png" width="150" style="margin: 10px;"/>
+  <img src="StupediaPics/pic2.png" width="150" style="margin: 10px;"/>
+  <img src="StupediaPics/pic3.png" width="150" style="margin: 10px;"/>
+  <img src="StupediaPics/pic4.png" width="150" style="margin: 10px;"/>
+  <img src="StupediaPics/pic5.png" width="150" style="margin: 10px;"/>
 </div>
 
 ## Motivation
